@@ -61,13 +61,7 @@ public:
 
 #ifdef _CRTBLD
     explicit basic_ifstream(const unsigned short* _Filename, ios_base::openmode _Mode = ios_base::in,
-        int _Prot = ios_base::_Default_open_prot)
-        : _Mybase(_STD addressof(_Filebuffer)) {
-        // in standard as const std::filesystem::path::value_type *; _Prot is an extension
-        if (_Filebuffer.open(_Filename, _Mode | ios_base::in, _Prot) == 0) {
-            _Myios::setstate(ios_base::failbit);
-        }
-    }
+        int _Prot = ios_base::_Default_open_prot) = delete;
 #endif // defined(_CRTBLD)
 
     explicit basic_ifstream(FILE* _File) : _Mybase(_STD addressof(_Filebuffer)), _Filebuffer(_File) {} // extension
@@ -140,20 +134,10 @@ public:
 
 #ifdef _CRTBLD
     void open(const unsigned short* _Filename, ios_base::openmode _Mode = ios_base::in,
-        int _Prot = ios_base::_Default_open_prot) {
-        // in standard as const std::filesystem::path::value_type *; _Prot is an extension
-        if (_Filebuffer.open(_Filename, _Mode | ios_base::in, _Prot) == 0) {
-            _Myios::setstate(ios_base::failbit);
-        } else {
-            _Myios::clear();
-        }
-    }
+        int _Prot = ios_base::_Default_open_prot) = delete;
 
 #if _HAS_OLD_IOSTREAMS_MEMBERS
-    void open(const unsigned short* _Filename, ios_base::open_mode _Mode) {
-        // in standard as const std::filesystem::path::value_type *
-        open(_Filename, static_cast<ios_base::openmode>(_Mode));
-    }
+    void open(const unsigned short* _Filename, ios_base::open_mode _Mode) = delete;
 #endif // _HAS_OLD_IOSTREAMS_MEMBERS
 #endif // defined(_CRTBLD)
 
@@ -244,13 +228,7 @@ public:
 
 #ifdef _CRTBLD
     explicit basic_ofstream(const unsigned short* _Filename, ios_base::openmode _Mode = ios_base::out,
-        int _Prot = ios_base::_Default_open_prot)
-        : _Mybase(_STD addressof(_Filebuffer)) {
-        // in standard as const std::filesystem::path::value_type *; _Prot is an extension
-        if (_Filebuffer.open(_Filename, _Mode | ios_base::out, _Prot) == 0) {
-            _Myios::setstate(ios_base::failbit);
-        }
-    }
+        int _Prot = ios_base::_Default_open_prot) = delete;
 #endif // defined(_CRTBLD)
 
     explicit basic_ofstream(FILE* _File) : _Mybase(_STD addressof(_Filebuffer)), _Filebuffer(_File) {} // extension
@@ -323,20 +301,10 @@ public:
 
 #ifdef _CRTBLD
     void open(const unsigned short* _Filename, ios_base::openmode _Mode = ios_base::out,
-        int _Prot = ios_base::_Default_open_prot) {
-        // in standard as const std::filesystem::path::value_type *; _Prot is an extension
-        if (_Filebuffer.open(_Filename, _Mode | ios_base::out, _Prot) == 0) {
-            _Myios::setstate(ios_base::failbit);
-        } else {
-            _Myios::clear();
-        }
-    }
+        int _Prot = ios_base::_Default_open_prot) = delete;
 
 #if _HAS_OLD_IOSTREAMS_MEMBERS
-    void open(const unsigned short* _Filename, ios_base::open_mode _Mode) {
-        // in standard as const std::filesystem::path::value_type *
-        open(_Filename, static_cast<ios_base::openmode>(_Mode));
-    }
+    void open(const unsigned short* _Filename, ios_base::open_mode _Mode) = delete;
 #endif // _HAS_OLD_IOSTREAMS_MEMBERS
 #endif // defined(_CRTBLD)
 
@@ -432,13 +400,7 @@ public:
 
 #ifdef _CRTBLD
     explicit basic_fstream(const unsigned short* _Filename, ios_base::openmode _Mode = ios_base::in | ios_base::out,
-        int _Prot = ios_base::_Default_open_prot)
-        : _Mybase(_STD addressof(_Filebuffer)) {
-        // in standard as const std::filesystem::path::value_type *; _Prot is an extension
-        if (_Filebuffer.open(_Filename, _Mode, _Prot) == 0) {
-            _Myios::setstate(ios_base::failbit);
-        }
-    }
+        int _Prot = ios_base::_Default_open_prot) = delete;
 #endif // defined(_CRTBLD)
 
     explicit basic_fstream(FILE* _File) : _Mybase(_STD addressof(_Filebuffer)), _Filebuffer(_File) {} // extension
@@ -512,20 +474,10 @@ public:
 
 #ifdef _CRTBLD
     void open(const unsigned short* _Filename, ios_base::openmode _Mode = ios_base::in | ios_base::out,
-        int _Prot = ios_base::_Default_open_prot) {
-        // in standard as const std::filesystem::path::value_type *; _Prot is an extension
-        if (_Filebuffer.open(_Filename, _Mode, _Prot) == 0) {
-            _Myios::setstate(ios_base::failbit);
-        } else {
-            _Myios::clear();
-        }
-    }
+        int _Prot = ios_base::_Default_open_prot) = delete;
 
 #if _HAS_OLD_IOSTREAMS_MEMBERS
-    void open(const unsigned short* _Filename, ios_base::open_mode _Mode) {
-        // in standard as const std::filesystem::path::value_type *
-        open(_Filename, static_cast<ios_base::openmode>(_Mode));
-    }
+    void open(const unsigned short* _Filename, ios_base::open_mode _Mode) = delete;
 #endif // _HAS_OLD_IOSTREAMS_MEMBERS
 #endif // defined(_CRTBLD)
 
