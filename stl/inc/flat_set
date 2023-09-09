@@ -469,9 +469,10 @@ private:
             _STL_INTERNAL_STATIC_ASSERT(is_same_v<remove_cvref_t<_Ty>, _Kty>);
             return _Cont.emplace(upper_bound(_Val), _STD forward<_Ty>(_Val));
         } else {
-            const iterator _End   = end();
-            const iterator _Where = lower_bound(_Val);
-            if (_Where != _End && _Keys_equal(*_Where, _Val)) {
+            const key_compare& _Compare = _Get_comp();
+            const iterator _End         = end();
+            const iterator _Where       = lower_bound(_Val);
+            if (_Where != _End && !_Compare(_Val, *_Where)) {
                 return pair{_Where, false};
             }
 
@@ -529,7 +530,7 @@ private:
             _STL_INTERNAL_CHECK(_Check_where(_Where, _Val));
             return _Cont.emplace(_Where, _STD forward<_Ty>(_Val));
         } else {
-            if (_Where != _End && _Keys_equal(_Val, *_Where)) {
+            if (_Where != _End && !_Compare(_Val, *_Where)) {
                 return _Cont.begin() + (_Where - _Begin);
             }
 
@@ -567,9 +568,10 @@ private:
     template <class _Other>
         requires _Keylt_transparent || is_same_v<_Other, _Kty>
     _NODISCARD iterator _Find(const _Other& _Val) {
-        const iterator _End   = end();
-        const iterator _Where = lower_bound(_Val);
-        if (_Where != _End && _Keys_equal(*_Where, _Val)) {
+        const key_compare& _Compare = _Get_comp();
+        const iterator _End         = end();
+        const iterator _Where       = lower_bound(_Val);
+        if (_Where != _End && !_Compare(_Val, *_Where)) {
             return _Where;
         } else {
             return _End;
@@ -579,9 +581,10 @@ private:
     template <class _Other>
         requires _Keylt_transparent || is_same_v<_Other, _Kty>
     _NODISCARD const_iterator _Find(const _Other& _Val) const {
+        const key_compare& _Compare = _Get_comp();
         const const_iterator _End   = cend();
         const const_iterator _Where = lower_bound(_Val);
-        if (_Where != _End && _Keys_equal(*_Where, _Val)) {
+        if (_Where != _End && !_Compare(_Val, *_Where)) {
             return _Where;
         } else {
             return _End;
@@ -609,7 +612,8 @@ private:
     template <bool _Presorted>
     void _Restore_invariants_after_insert(const size_type _Old_size) {
         const key_compare& _Compare = _Get_comp();
-        const iterator _Old_end     = begin() + static_cast<difference_type>(_Old_size);
+        const iterator _Begin       = begin();
+        const iterator _Old_end     = _Begin + static_cast<difference_type>(_Old_size);
         const iterator _New_end     = end();
 
         if constexpr (!_Presorted) {
@@ -618,9 +622,9 @@ private:
             _STL_ASSERT(_STD is_sorted(_Old_end, _New_end, _Compare), "Input was not sorted!");
         }
 
-        _STD inplace_merge(begin(), _Old_end, _New_end, _Compare);
+        _STD inplace_merge(_Begin, _Old_end, _New_end, _Compare);
 
-        _STL_INTERNAL_CHECK(_STD is_sorted(begin(), end(), _Compare));
+        _STL_INTERNAL_CHECK(_STD is_sorted(_Begin, _New_end, _Compare));
 
         _Erase_dupes_if_needed();
     }
