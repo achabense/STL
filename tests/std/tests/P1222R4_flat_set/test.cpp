@@ -288,6 +288,12 @@ void test_extract() {
     assert(ranges::equal(cont, elements));
 }
 
+void test_erase() {
+    flat_set<int> fs{1};
+    fs.erase(1);
+    assert(fs.count(1) == 0);
+}
+
 template <class C>
 void test_erase_if() {
     constexpr int erased_result[]{1, 3};
@@ -295,6 +301,25 @@ void test_erase_if() {
     erase_if(fs, [](int n) { return n % 2 == 0; });
     assert(fs.size() == 2);
     assert(ranges::equal(fs, erased_result));
+}
+
+template <class T>
+struct holder {
+    T t;
+    operator T() && {
+        return std::move(t);
+    }
+};
+
+void test_heterogeneous_erasure() {
+    using C = flat_set<int, std::less<>>;
+    C fs{1, 2, 3};
+    assert_all_requirements_and_equals(fs, {1, 2, 3});
+    fs.erase(holder<C::iterator>{fs.begin()});
+    assert_all_requirements_and_equals(fs, {2, 3});
+    int i = 2;
+    fs.erase(std::ref(i));
+    assert_all_requirements_and_equals(fs, {3});
 }
 
 int main() {
@@ -320,6 +345,8 @@ int main() {
     test_extract<flat_set<int>>();
     test_extract<flat_multiset<int>>();
 
+    test_erase();
     test_erase_if<flat_set<int>>();
     test_erase_if<flat_multiset<int>>();
+    test_heterogeneous_erasure();
 }
