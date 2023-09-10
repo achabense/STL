@@ -1544,19 +1544,20 @@ private:
     }
 
     void _Growmap(size_type _Count) { // grow map by at least _Count pointers, _Mapsize() a power of 2
-        static_assert(_Minimum_map_size > 1, "The _Xlen() test should always be performed.");
+        _STL_INTERNAL_STATIC_ASSERT(_Is_pow_2(_Minimum_map_size) && _Is_pow_2(_Block_size));
 
-        _Alpty _Almap(_Getal());
-        size_type _Newsize = _Mapsize() > 0 ? _Mapsize() : 1;
-        while (_Newsize - _Mapsize() < _Count || _Newsize < _Minimum_map_size) {
+        size_type _Newsize           = _Mapsize() > 0 ? _Mapsize() : _Minimum_map_size;
+        const size_type _No_overflow = max_size() / (_Block_size * 2);
+        while (_Newsize - _Mapsize() < _Count) {
             // scale _Newsize to 2^N >= _Mapsize() + _Count
-            if (max_size() / _Block_size - _Newsize < _Newsize) {
+            if (_Newsize > _No_overflow) {
                 _Xlen(); // result too long
             }
 
             _Newsize *= 2;
         }
 
+        _Alpty _Almap(_Getal());
         size_type _Allocsize = _Newsize;
 
         size_type _Myboff = _Myoff() / _Block_size;
